@@ -1,10 +1,11 @@
 import "dotenv/config";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { connectToDatabase } from "./config/db";
 import { APP_ORIGIN, NODE_ENV, PORT } from "./constants/env";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import errorHandler from "./middleware/errorHandler";
+import e from "express";
 
 const app = express();
 
@@ -21,9 +22,15 @@ app.use(
   })
 );
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+
+  try {
     throw new Error("This is a test Error")
-  res.status(200).json({ status: "HHELLO WORKD" });
+    res.status(200).json({ status: "HHELLO WORKD" });
+  } catch (error) {
+    next(error)
+  }
+  
 });
 
 app.use(errorHandler);
