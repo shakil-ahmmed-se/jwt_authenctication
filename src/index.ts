@@ -6,6 +6,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import errorHandler from "./middleware/errorHandler";
 import e from "express";
+import catachErrors from "./utils/catachErrors";
+import { OK } from "./constants/http";
+import authRoutes from "./routes/auth.route";
 
 const app = express();
 
@@ -23,15 +26,11 @@ app.use(
 );
 
 app.get("/", (req: Request, res: Response, next: NextFunction) => {
-
-  try {
-    throw new Error("This is a test Error")
-    res.status(200).json({ status: "HHELLO WORKD" });
-  } catch (error) {
-    next(error)
-  }
-  
+  res.status(OK).json({ status: "HELLO WORLD" });
 });
+
+// auth routes
+app.use("/auth", authRoutes)
 
 app.use(errorHandler);
 
